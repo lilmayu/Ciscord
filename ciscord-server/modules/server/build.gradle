@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "io.sentry.jvm.gradle" version "3.12.0"
+}
+
+group = 'dev.mayuna'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":commons")
+
+    // Pumpk1n
+    implementation 'dev.mayuna:pumpk1n:2.1.1-hotfix2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    archiveBaseName = '../../../../artifacts/ciscord-server'
+
+    manifest {
+        attributes 'Main-Class': 'dev.mayuna.ciscord.server.Main'
+    }
+
+    exclude "**/Log4j2Plugins.dat"
+}
