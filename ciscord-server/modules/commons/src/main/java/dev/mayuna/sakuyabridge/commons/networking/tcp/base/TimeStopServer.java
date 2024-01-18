@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 @Getter
 public class TimeStopServer extends Server implements Listener {
 
-    private static final SakuyaBridgeLogger LOGGER = SakuyaBridgeLogger.create(TimeStopServer.class);
+    protected static final SakuyaBridgeLogger LOGGER = SakuyaBridgeLogger.create(TimeStopServer.class);
 
     private final Timer timeoutTimer = new Timer();
     private final EndpointConfig endpointConfig;
