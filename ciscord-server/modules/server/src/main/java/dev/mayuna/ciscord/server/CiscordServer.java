@@ -1,6 +1,9 @@
 package dev.mayuna.ciscord.server;
 
+import com.esotericsoftware.kryonet.Connection;
 import dev.mayuna.ciscord.server.configs.ServerConfig;
+import dev.mayuna.ciscord.server.networking.tcp.CiscordTimeStopConnection;
+import dev.mayuna.ciscord.server.networking.tcp.listeners.ProtocolVersionExchangeListener;
 import dev.mayuna.sakuyabridge.commons.managers.EncryptionManager;
 import dev.mayuna.sakuyabridge.commons.networking.NetworkConstants;
 import dev.mayuna.sakuyabridge.commons.networking.tcp.base.TimeStopConnection;
@@ -26,6 +29,11 @@ public class CiscordServer extends TimeStopServer {
         this.encryptionManager = encryptionManager;
     }
 
+    @Override
+    protected Connection newConnection() {
+        return new CiscordTimeStopConnection(getListenerManager(), getTranslatorManager());
+    }
+
     /**
      * Setups the Ciscord Server
      * @return true if setup was successful, false otherwise
@@ -48,8 +56,7 @@ public class CiscordServer extends TimeStopServer {
 
         LOGGER.info("Registering server listeners...");
         TimeStopListenerManager listenerManager = getListenerManager();
-        /*
-        listenerManager.registerListener(new ProtocolVersionExchangeListener());
+        listenerManager.registerListener(new ProtocolVersionExchangeListener());/*
         listenerManager.registerListener(new AsymmetricKeyExchangeListener());
         listenerManager.registerListener(new EncryptedCommunicationRequestListener());
         listenerManager.registerListener(new LoginMethodsRequestListener());*/
