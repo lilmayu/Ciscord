@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        /*
         binding.appBarMain.fab.setOnClickListener { view ->
             Snackbar.make(view, "Starting Ciscord Client", Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show()
@@ -58,15 +59,16 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
             }.start()
-        }
+        }*/
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navController = findNavController(R.id.nav_host_fragment_content_chat)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_chat
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -80,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navController = findNavController(R.id.nav_host_fragment_content_chat)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

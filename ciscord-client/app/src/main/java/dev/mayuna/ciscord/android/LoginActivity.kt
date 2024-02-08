@@ -1,6 +1,7 @@
 package dev.mayuna.ciscord.android
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.Menu
@@ -144,6 +145,11 @@ class LoginActivity : AppCompatActivity() {
 
         savePreferences()
 
+        // todo: Custom activity for loading
+        // todo: try connect
         // todo: try login
+
+        // Open main activity
+        startActivity(Intent(this, MainActivity::class.java));
     }
 }
