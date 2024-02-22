@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("plugin.lombok") version "1.9.22"
+    id("io.freefair.lombok") version "8.1.0"
 }
 
 android {
@@ -48,9 +50,22 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+    implementation(project(mapOf("path" to ":commons")))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    project(":commons")
+    implementation ("com.github.crykn:kryonet:2.22.8")
+    implementation ("com.esotericsoftware:kryo:5.5.0")
+    implementation ("com.google.code.gson:gson:2.10")
+    implementation ("dev.mayuna:mayus-json-utilities:1.3.2")
+    implementation ("dev.mayuna:time-stop-protocol:0.0.2")
+
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.24")
+    annotationProcessor("org.projectlombok:lombok:1.18.24")
+
+
+    //implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }

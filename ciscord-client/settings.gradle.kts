@@ -6,14 +6,14 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io")
     }
 }
 
 rootProject.name = "ciscord-client"
 include(":app")
-//include(":commons")
-//project(":commons").projectDir = file("../../ciscord-server/modules/commons")
+include(":commons")
+project(":commons").projectDir = file("../../Ciscord/ciscord-server/modules/commons")

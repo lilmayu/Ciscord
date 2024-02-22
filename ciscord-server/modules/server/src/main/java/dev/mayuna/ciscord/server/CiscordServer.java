@@ -1,19 +1,26 @@
 package dev.mayuna.ciscord.server;
 
 import com.esotericsoftware.kryonet.Connection;
+import dev.mayuna.ciscord.commons.networking.CiscordPackets;
 import dev.mayuna.ciscord.server.configs.ServerConfig;
 import dev.mayuna.ciscord.server.networking.tcp.CiscordTimeStopConnection;
+import dev.mayuna.ciscord.server.networking.tcp.listeners.DoesUsernameExistListener;
+import dev.mayuna.ciscord.server.networking.tcp.listeners.LoginUserListener;
 import dev.mayuna.ciscord.server.networking.tcp.listeners.ProtocolVersionExchangeListener;
-import dev.mayuna.sakuyabridge.commons.managers.EncryptionManager;
-import dev.mayuna.sakuyabridge.commons.networking.NetworkConstants;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.TimeStopConnection;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.TimeStopServer;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.listener.TimeStopListenerManager;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.timestop.translators.TimeStopPacketEncryptionTranslator;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.timestop.translators.TimeStopPacketSegmentTranslator;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.timestop.translators.TimeStopPacketTranslator;
+import dev.mayuna.ciscord.server.networking.tcp.listeners.RegisterUserListener;
+import dev.mayuna.sakuyabridge.commons.logging.SakuyaBridgeLogger;
+import dev.mayuna.timestop.managers.EncryptionManager;
+import dev.mayuna.timestop.networking.NetworkConstants;
+import dev.mayuna.timestop.networking.base.TimeStopServer;
+import dev.mayuna.timestop.networking.base.listener.TimeStopListenerManager;
+import dev.mayuna.timestop.networking.timestop.translators.TimeStopPacketSegmentTranslator;
+import dev.mayuna.timestop.networking.timestop.translators.TimeStopPacketTranslator;
 
 public class CiscordServer extends TimeStopServer {
+
+    public static final int PROTOCOL_VERSION = 1;
+
+    private static final SakuyaBridgeLogger LOGGER = SakuyaBridgeLogger.create(ProtocolVersionExchangeListener.class);
 
     private final EncryptionManager encryptionManager;
     private final ServerConfig serverConfig;
@@ -41,6 +48,9 @@ public class CiscordServer extends TimeStopServer {
     public boolean setup() {
         LOGGER.info("Starting Ciscord Server on port " + serverConfig.getServerPort() + "...");
 
+        LOGGER.info("Registering classes...");
+        CiscordPackets.register(this.getKryo());
+
         try {
             bind(serverConfig.getServerPort());
         } catch (Exception e) {
@@ -51,8 +61,8 @@ public class CiscordServer extends TimeStopServer {
         LOGGER.info("Registering server translators...");
         getTranslatorManager().registerTranslator(new TimeStopPacketTranslator());
         getTranslatorManager().registerTranslator(new TimeStopPacketSegmentTranslator(NetworkConstants.OBJECT_BUFFER_SIZE));
-        getTranslatorManager().registerTranslator(new TimeStopPacketEncryptionTranslator.Encrypt(encryptionManager, context -> ((TimeStopConnection) context.getConnection()).isEncryptDataSentOverNetwork()));
-        getTranslatorManager().registerTranslator(new TimeStopPacketEncryptionTranslator.Decrypt(encryptionManager, context -> ((TimeStopConnection) context.getConnection()).isEncryptDataSentOverNetwork()));
+        //getTranslatorManager().registerTranslator(new TimeStopPacketEncryptionTranslator.Encrypt(encryptionManager, context -> ((TimeStopConnection) context.getConnection()).isEncryptDataSentOverNetwork()));
+        //getTranslatorManager().registerTranslator(new TimeStopPacketEncryptionTranslator.Decrypt(encryptionManager, context -> ((TimeStopConnection) context.getConnection()).isEncryptDataSentOverNetwork()));
 
         LOGGER.info("Registering server listeners...");
         TimeStopListenerManager listenerManager = getListenerManager();
@@ -60,6 +70,10 @@ public class CiscordServer extends TimeStopServer {
         listenerManager.registerListener(new AsymmetricKeyExchangeListener());
         listenerManager.registerListener(new EncryptedCommunicationRequestListener());
         listenerManager.registerListener(new LoginMethodsRequestListener());*/
+
+        listenerManager.registerListener(new DoesUsernameExistListener());
+        listenerManager.registerListener(new RegisterUserListener());
+        listenerManager.registerListener(new LoginUserListener());
 
         return true;
     }

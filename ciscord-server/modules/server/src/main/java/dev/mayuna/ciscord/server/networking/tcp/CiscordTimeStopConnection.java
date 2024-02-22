@@ -1,8 +1,8 @@
 package dev.mayuna.ciscord.server.networking.tcp;
 
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.TimeStopConnection;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.listener.TimeStopListenerManager;
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.translator.TimeStopTranslatorManager;
+import dev.mayuna.timestop.networking.base.TimeStopConnection;
+import dev.mayuna.timestop.networking.base.listener.TimeStopListenerManager;
+import dev.mayuna.timestop.networking.base.translator.TimeStopTranslatorManager;
 
 public class CiscordTimeStopConnection extends TimeStopConnection {
 

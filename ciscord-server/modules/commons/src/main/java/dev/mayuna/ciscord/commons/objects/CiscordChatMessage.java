@@ -5,14 +5,16 @@ import lombok.Setter;
 
 import java.util.Date;
 
+@Getter
 public class CiscordChatMessage {
 
-    private @Getter long id;
-    private @Getter long channelId = 0; // TODO: Always 0 for now
-    private @Getter long authorId;
-    private @Getter Date date;
-    private @Getter @Setter String contentMessage;
-    private @Getter @Setter boolean deleted;
+    private long id;
+    private long channelId = 0; // TODO: Always 0 for now
+    private long authorId;
+    private Date date;
+    private @Setter String contentMessage;
+    private @Setter boolean deleted;
+    private @Setter boolean delivered;
 
     public CiscordChatMessage(long id, long authorId, Date date, String contentMessage) {
         this.id = id;

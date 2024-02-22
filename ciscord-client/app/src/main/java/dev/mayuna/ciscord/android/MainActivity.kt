@@ -2,7 +2,6 @@ package dev.mayuna.ciscord.android
 
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,12 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import dev.mayuna.ciscord.android.backend.Ciscord
-import dev.mayuna.ciscord.android.backend.configs.ClientConfig
-import dev.mayuna.ciscord.android.backend.networking.tcp.CiscordClient
-import dev.mayuna.ciscord.android.backend.networking.tcp.NetworkTask
 import dev.mayuna.ciscord.android.databinding.ActivityMainBinding
-import dev.mayuna.sakuyabridge.commons.networking.tcp.timestop.Packets
 
 class MainActivity : AppCompatActivity() {
 

@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation project(":commons")
+    implementation 'dev.mayuna:time-stop-protocol:0.0.2'
 
     // Pumpk1n
     implementation 'dev.mayuna:pumpk1n:2.1.1-hotfix2'

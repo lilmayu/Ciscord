@@ -25,11 +25,11 @@ public class ApplicationConfigLoader {
             try {
                 JsonUtil.saveJson(gson.toJsonTree(clazz.getConstructor().newInstance()).getAsJsonObject(), configFile, true);
             } catch (Exception exception) {
-                throw new ConfigException("Could not save default config " + clazz.getName() + " at " + configFile.getAbsolutePath() + "!", exception);
+                throw new RuntimeException("Could not save default config " + clazz.getName() + " at " + configFile.getAbsolutePath() + "!", exception);
             }
 
             if (throwExceptionIfNotExisted) {
-                throw new ConfigException("Config did not exist and default one was created. Please, edit it and start the application again.");
+                throw new RuntimeException("Config did not exist and default one was created. Please, edit it and start the application again.");
             }
         }
 
@@ -38,13 +38,13 @@ public class ApplicationConfigLoader {
         try {
             config = gson.fromJson(JsonUtil.loadJson(configFile.getAbsolutePath()).getJsonObject(), clazz);
         } catch (Exception exception) {
-            throw new ConfigException("Could not load config " + clazz.getName() + " at " + configFile.getAbsolutePath() + "! Please, check if there are no errors in JSON.", exception);
+            throw new RuntimeException("Could not load config " + clazz.getName() + " at " + configFile.getAbsolutePath() + "! Please, check if there are no errors in JSON.", exception);
         }
 
         try {
             JsonUtil.saveJson(gson.toJsonTree(config).getAsJsonObject(), configFile, true);
         } catch (Exception exception) {
-            throw new ConfigException("Could not save loaded config " + clazz.getName() + " at " + configFile.getAbsolutePath() + "!", exception);
+            throw new RuntimeException("Could not save loaded config " + clazz.getName() + " at " + configFile.getAbsolutePath() + "!", exception);
         }
 
         return config;
@@ -63,7 +63,7 @@ public class ApplicationConfigLoader {
         try {
             JsonUtil.saveJson(gson.toJsonTree(config).getAsJsonObject(), configFile, true);
         } catch (Exception exception) {
-            throw new ConfigException("Could not save config " + config.getClass().getName() + " at " + configFile.getAbsolutePath() + "!", exception);
+            throw new RuntimeException("Could not save config " + config.getClass().getName() + " at " + configFile.getAbsolutePath() + "!", exception);
         }
     }
 }

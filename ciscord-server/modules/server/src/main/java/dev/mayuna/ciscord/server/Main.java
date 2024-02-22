@@ -6,7 +6,7 @@ import dev.mayuna.ciscord.server.configs.ServerConfig;
 import dev.mayuna.sakuyabridge.commons.config.ApplicationConfigLoader;
 import dev.mayuna.sakuyabridge.commons.logging.KryoLogger;
 import dev.mayuna.sakuyabridge.commons.logging.SakuyaBridgeLogger;
-import dev.mayuna.sakuyabridge.commons.managers.EncryptionManager;
+import dev.mayuna.timestop.managers.EncryptionManager;
 
 public class Main {
 

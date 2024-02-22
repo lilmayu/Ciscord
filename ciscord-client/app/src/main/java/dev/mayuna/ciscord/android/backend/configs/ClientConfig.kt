@@ -1,7 +1,7 @@
 package dev.mayuna.ciscord.android.backend.configs
 
-import dev.mayuna.sakuyabridge.commons.config.EncryptionConfig
-import dev.mayuna.sakuyabridge.commons.networking.tcp.base.EndpointConfig
+import dev.mayuna.timestop.config.EncryptionConfig
+import dev.mayuna.timestop.networking.base.EndpointConfig
 
 class ClientConfig {
 
