@@ -16,6 +16,9 @@ public class CiscordChatMessage {
     private @Setter boolean deleted;
     private @Setter boolean delivered;
 
+    public CiscordChatMessage() {
+    }
+
     public CiscordChatMessage(long id, long authorId, Date date, String contentMessage) {
         this.id = id;
         this.authorId = authorId;

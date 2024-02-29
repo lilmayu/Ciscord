@@ -12,4 +12,5 @@ public class ServerConfig {
 
     private EndpointConfig endpointConfig = new EndpointConfig();
     private EncryptionConfig encryptionConfig = new EncryptionConfig();
+    private SqlConfig sqlConfig = new SqlConfig();
 }

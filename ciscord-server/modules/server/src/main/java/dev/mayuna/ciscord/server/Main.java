@@ -3,19 +3,24 @@ package dev.mayuna.ciscord.server;
 import com.esotericsoftware.minlog.Log;
 import com.google.gson.Gson;
 import dev.mayuna.ciscord.server.configs.ServerConfig;
+import dev.mayuna.ciscord.server.networking.sql.ConnectionPoolManager;
+import dev.mayuna.ciscord.server.networking.sql.SqlManager;
 import dev.mayuna.sakuyabridge.commons.config.ApplicationConfigLoader;
 import dev.mayuna.sakuyabridge.commons.logging.KryoLogger;
 import dev.mayuna.sakuyabridge.commons.logging.SakuyaBridgeLogger;
 import dev.mayuna.timestop.managers.EncryptionManager;
+import lombok.Getter;
 
 public class Main {
 
     private static final SakuyaBridgeLogger LOGGER = SakuyaBridgeLogger.create(Main.class);
     private static final Gson gson = new Gson();
 
-    private static ServerConfig serverConfig;
-    private static EncryptionManager encryptionManager;
-    private static CiscordServer server;
+    private static @Getter ServerConfig serverConfig;
+    private static @Getter EncryptionManager encryptionManager;
+    private static @Getter SqlManager sqlManager;
+
+    private static @Getter CiscordServer server;
 
     public static void main(String[] args) {
         LOGGER.info("Hello Ciscord!");
@@ -46,6 +51,9 @@ public class Main {
      * Prepares the managers
      */
     private static void prepareManagers() {
+        sqlManager = new SqlManager();
+        sqlManager.init(serverConfig.getSqlConfig());
+
         encryptionManager = new EncryptionManager(serverConfig.getEncryptionConfig());
 
         try {

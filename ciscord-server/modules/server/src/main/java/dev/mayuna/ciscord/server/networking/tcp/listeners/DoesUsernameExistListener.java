@@ -1,6 +1,7 @@
 package dev.mayuna.ciscord.server.networking.tcp.listeners;
 
 import dev.mayuna.ciscord.commons.networking.CiscordPackets;
+import dev.mayuna.ciscord.server.Main;
 import dev.mayuna.timestop.networking.base.listener.TimeStopListener;
 import lombok.NonNull;
 
@@ -15,8 +16,13 @@ public class DoesUsernameExistListener extends TimeStopListener<CiscordPackets.R
 
     @Override
     public void process(@NonNull Context context, CiscordPackets.Requests.@NonNull DoesUsernameExist message) {
-        // TODO:
+        Main.getSqlManager().doesUsernameExist(message.getUsername()).whenCompleteAsync((exists, throwable) -> {
+            if (throwable != null) {
+                context.getConnection().sendTCP(new CiscordPackets.Responses.DoesUsernameExist().withError("Failed to check for username existence").withResponseTo(message));
+                return;
+            }
 
-        context.getConnection().sendTCP(new CiscordPackets.Responses.DoesUsernameExist(false).withResponseTo(message));
+            context.getConnection().sendTCP(new CiscordPackets.Responses.DoesUsernameExist(exists).withResponseTo(message));
+        });
     }
 }

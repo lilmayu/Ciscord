@@ -42,7 +42,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun loadPreferences() {
-        val sharedPref = this.getSharedPreferences(Constants.PREFERENCES_STORAGE_ID, Context.MODE_PRIVATE)
+        val sharedPref =
+            this.getSharedPreferences(Constants.PREFERENCES_STORAGE_ID, Context.MODE_PRIVATE)
 
         val serverAddress = sharedPref.getString(Constants.PREFERENCES_SERVER_ADDRESS_ID, null)
         val username = sharedPref.getString(Constants.PREFERENCES_USERNAME_ID, null)
@@ -61,10 +62,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun savePreferences() {
-        val sharedPref = this.getSharedPreferences(Constants.PREFERENCES_STORAGE_ID, Context.MODE_PRIVATE)
+        val sharedPref =
+            this.getSharedPreferences(Constants.PREFERENCES_STORAGE_ID, Context.MODE_PRIVATE)
 
         with(sharedPref.edit()) {
-            putString(Constants.PREFERENCES_SERVER_ADDRESS_ID, txtinputServerAddress.text.toString())
+            putString(
+                Constants.PREFERENCES_SERVER_ADDRESS_ID,
+                txtinputServerAddress.text.toString()
+            )
             putString(Constants.PREFERENCES_USERNAME_ID, txtinputUsername.text.toString())
             commit()
         }
@@ -82,13 +87,21 @@ class LoginActivity : AppCompatActivity() {
                 val serverAddressSplit = serverAddress.split(":")
 
                 if (serverAddressSplit.size != 2) {
-                    Snackbar.make(constraintLayout, "Server address is invalid", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        constraintLayout,
+                        "Server address is invalid",
+                        Snackbar.LENGTH_SHORT
+                    )
                         .setAction("Action", null).show()
                     return false
                 } else {
                     val serverAddressPort = serverAddressSplit[1].toIntOrNull()
                     if (serverAddressPort == null) {
-                        Snackbar.make(constraintLayout, "Server address (port) is invalid", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(
+                            constraintLayout,
+                            "Server address (port) is invalid",
+                            Snackbar.LENGTH_SHORT
+                        )
                             .setAction("Action", null).show()
                         return false
                     }
@@ -100,7 +113,11 @@ class LoginActivity : AppCompatActivity() {
             // check for valid inet address
             try {
                 if (InetAddress.getByName(serverAddress).isAnyLocalAddress) {
-                    Snackbar.make(constraintLayout, "Server address is invalid", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        constraintLayout,
+                        "Server address is invalid",
+                        Snackbar.LENGTH_SHORT
+                    )
                         .setAction("Action", null).show()
                     return false
                 }
@@ -145,7 +162,7 @@ class LoginActivity : AppCompatActivity() {
 
         val address = splitAddressPort(txtinputServerAddress.text.toString())
 
-        Utils.runAsync {
+        Utils.runAsyncSafe({
             try {
                 Ciscord.createClientAndConnect(address.first, address.second)
             } catch (e: Exception) {
@@ -157,21 +174,23 @@ class LoginActivity : AppCompatActivity() {
                         .show()
                 }
 
-                return@runAsync
+                return@runAsyncSafe
             }
 
-            var taskResult = LoginTask.login(txtinputUsername.text.toString(), txtinputPassword.text.toString()).join();
+            val taskResult =
+                LoginTask.login(txtinputUsername.text.toString(), txtinputPassword.text.toString())
+                    .join();
 
             if (taskResult == null) {
                 this.runOnUiThread {
                     MaterialAlertDialogBuilder(this)
                         .setTitle("Error")
-                        .setMessage("Failed to login")
+                        .setMessage("Failed to login (result is null)")
                         .setPositiveButton("OK", null)
                         .show()
                 }
 
-                return@runAsync
+                return@runAsyncSafe
             }
 
             if (taskResult.isSuccess) {
@@ -180,11 +199,17 @@ class LoginActivity : AppCompatActivity() {
                 this.runOnUiThread {
                     MaterialAlertDialogBuilder(this)
                         .setTitle("Error")
-                        .setMessage("Failed to login\n\n${taskResult.errorMessage}")
+                        .setMessage(taskResult.errorMessage)
                         .setPositiveButton("OK", null)
                         .show()
                 }
             }
-        };
+        }, {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Error")
+                .setMessage("Failed to login (exception)\n\n${it.message}")
+                .setPositiveButton("OK", null)
+                .show()
+        })
     }
 }

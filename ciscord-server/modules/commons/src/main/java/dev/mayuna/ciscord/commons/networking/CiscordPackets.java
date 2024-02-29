@@ -9,6 +9,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public class CiscordPackets {
 
@@ -47,6 +48,7 @@ public class CiscordPackets {
         // Java
         kryo.register(LinkedList.class);
         kryo.register(ArrayList.class);
+        kryo.register(UUID.class);
     }
 
     public static class Requests {
@@ -147,7 +149,7 @@ public class CiscordPackets {
         @Getter
         public static class RegisterUser extends CiscordPacket {
 
-            private boolean success;
+            private boolean success = false;
             private CiscordUser user;
 
             public RegisterUser() {

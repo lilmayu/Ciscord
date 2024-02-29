@@ -13,6 +13,9 @@ public class CiscordChannel {
     private @Getter String name;
     private @Getter List<CiscordChatMessage> messages = new LinkedList<>();
 
+    public CiscordChannel() {
+    }
+
     /**
      * Creates a new CiscordChannel
      *

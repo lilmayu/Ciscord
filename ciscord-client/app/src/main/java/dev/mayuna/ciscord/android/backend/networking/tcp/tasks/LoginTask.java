@@ -34,6 +34,7 @@ public class LoginTask {
 
             if (!loginUserResponse.isSuccess()) {
                 future.complete(TaskResult.failure("Failed to login: " + loginUserResponse.getErrorMessage()));
+                return;
             }
 
             Ciscord.user = loginUserResponse.getUser();
