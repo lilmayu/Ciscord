@@ -4,10 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import dev.mayuna.ciscord.commons.networking.CiscordPackets;
 import dev.mayuna.ciscord.server.configs.ServerConfig;
 import dev.mayuna.ciscord.server.networking.tcp.CiscordTimeStopConnection;
-import dev.mayuna.ciscord.server.networking.tcp.listeners.DoesUsernameExistListener;
-import dev.mayuna.ciscord.server.networking.tcp.listeners.LoginUserListener;
-import dev.mayuna.ciscord.server.networking.tcp.listeners.ProtocolVersionExchangeListener;
-import dev.mayuna.ciscord.server.networking.tcp.listeners.RegisterUserListener;
+import dev.mayuna.ciscord.server.networking.tcp.listeners.*;
 import dev.mayuna.sakuyabridge.commons.logging.SakuyaBridgeLogger;
 import dev.mayuna.timestop.managers.EncryptionManager;
 import dev.mayuna.timestop.networking.NetworkConstants;
@@ -74,6 +71,13 @@ public class CiscordServer extends TimeStopServer {
         listenerManager.registerListener(new DoesUsernameExistListener());
         listenerManager.registerListener(new RegisterUserListener());
         listenerManager.registerListener(new LoginUserListener());
+        listenerManager.registerListener(new CreateChannelListener());
+        listenerManager.registerListener(new DeleteChannelByIdListener());
+        listenerManager.registerListener(new FetchChannelByIdListener());
+        listenerManager.registerListener(new FetchChannelsListener());
+        listenerManager.registerListener(new FetchMessagesInChannelAfterIdListener());
+        listenerManager.registerListener(new SendMessageListener());
+        listenerManager.registerListener(new UpdateChannelListener());
 
         return true;
     }

@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    >
 
     <!-- Divider -->
     <View
@@ -45,6 +48,7 @@
         android:layout_height="wrap_content"
         android:width="0dp"
         android:textSize="16sp"
+        android:layout_marginLeft="10dp"
         android:text="Some really long text woohoo super duper okay very nice okay super good yes nice"
         />
 

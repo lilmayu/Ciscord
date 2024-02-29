@@ -6,10 +6,7 @@ import dev.mayuna.ciscord.commons.objects.CiscordChatMessage;
 import dev.mayuna.ciscord.commons.objects.CiscordUser;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CiscordPackets {
 
@@ -42,8 +39,26 @@ public class CiscordPackets {
         kryo.register(Requests.SendMessage.class);
         kryo.register(Responses.SendMessage.class);
 
-        kryo.register(Requests.RetrieveMessageHistory.class);
-        kryo.register(Responses.RetrieveMessageHistory.class);
+        kryo.register(Requests.FetchChannelById.class);
+        kryo.register(Responses.FetchChannelById.class);
+
+        kryo.register(Requests.CreateChannel.class);
+        kryo.register(Responses.CreateChannel.class);
+
+        kryo.register(Requests.UpdateChannel.class);
+        kryo.register(Responses.UpdateChannel.class);
+
+        kryo.register(Requests.DeleteChannelById.class);
+        kryo.register(Responses.DeleteChannelById.class);
+
+        kryo.register(Requests.FetchChannels.class);
+        kryo.register(Responses.FetchChannels.class);
+
+        kryo.register(Requests.FetchMessagesInChannelAfterId.class);
+        kryo.register(Responses.FetchMessagesInChannelAfterId.class);
+
+        kryo.register(Requests.SendMessage.class);
+        kryo.register(Responses.SendMessage.class);
 
         // Java
         kryo.register(LinkedList.class);
@@ -97,32 +112,93 @@ public class CiscordPackets {
         }
 
         @Getter
-        public static class SendMessage extends CiscordPacket {
+        public static class FetchChannelById extends CiscordPacket {
 
             private long channelId;
-            private String content;
 
-            public SendMessage() {
+            public FetchChannelById() {
             }
 
-            public SendMessage(long channelId, String content) {
+            public FetchChannelById(long channelId) {
                 this.channelId = channelId;
-                this.content = content;
             }
         }
 
         @Getter
-        public static class RetrieveMessageHistory extends CiscordPacket {
+        public static class CreateChannel extends CiscordPacket {
 
-            private long channelId;
-            private long fromMessageId;
+            private String channelName;
 
-            public RetrieveMessageHistory() {
+            public CreateChannel() {
             }
 
-            public RetrieveMessageHistory(long channelId, long fromMessageId) {
+            public CreateChannel(String channelName) {
+                this.channelName = channelName;
+            }
+        }
+
+        @Getter
+        public static class UpdateChannel extends CiscordPacket {
+
+            private long channelId;
+            private String newChannelName;
+
+            public UpdateChannel() {
+            }
+
+            public UpdateChannel(long channelId, String newChannelName) {
                 this.channelId = channelId;
-                this.fromMessageId = fromMessageId;
+                this.newChannelName = newChannelName;
+            }
+        }
+
+        @Getter
+        public static class DeleteChannelById extends CiscordPacket {
+
+            private long channelId;
+
+            public DeleteChannelById() {
+            }
+
+            public DeleteChannelById(long channelId) {
+                this.channelId = channelId;
+            }
+        }
+
+        @Getter
+        public static class FetchChannels extends CiscordPacket {
+
+            public FetchChannels() {
+            }
+        }
+
+        @Getter
+        public static class FetchMessagesInChannelAfterId extends CiscordPacket {
+
+            private long channelId;
+            private long messageId;
+
+            public FetchMessagesInChannelAfterId() {
+            }
+
+            public FetchMessagesInChannelAfterId(long channelId, long messageId) {
+                this.channelId = channelId;
+                this.messageId = messageId;
+            }
+        }
+
+        @Getter
+        public static class SendMessage extends CiscordPacket {
+
+            private long channelId;
+            private String messageContent;
+
+            public SendMessage() {
+            }
+
+            public SendMessage(long channelId, String messageContent) {
+                this.channelId = channelId;
+                this.messageContent = messageContent;
             }
         }
     }
@@ -193,6 +269,84 @@ public class CiscordPackets {
         }
 
         @Getter
+        public static class FetchChannelById extends CiscordPacket {
+
+            private CiscordChannel channel;
+
+            public FetchChannelById() {
+            }
+
+            public FetchChannelById(CiscordChannel channel) {
+                this.channel = channel;
+            }
+        }
+
+        @Getter
+        public static class CreateChannel extends CiscordPacket {
+
+            private CiscordChannel channel;
+
+            public CreateChannel() {
+            }
+
+            public CreateChannel(CiscordChannel channel) {
+                this.channel = channel;
+            }
+        }
+
+        @Getter
+        public static class UpdateChannel extends CiscordPacket {
+
+            private boolean success;
+
+            public UpdateChannel() {
+            }
+
+            public UpdateChannel(boolean success) {
+                this.success = success;
+            }
+        }
+
+        @Getter
+        public static class DeleteChannelById extends CiscordPacket {
+
+            private boolean success;
+
+            public DeleteChannelById() {
+            }
+
+            public DeleteChannelById(boolean success) {
+                this.success = success;
+            }
+        }
+
+        @Getter
+        public static class FetchChannels extends CiscordPacket {
+
+            private List<CiscordChannel> channels;
+
+            public FetchChannels() {
+            }
+
+            public FetchChannels(List<CiscordChannel> channels) {
+                this.channels = channels;
+            }
+        }
+
+        @Getter
+        public static class FetchMessagesInChannelAfterId extends CiscordPacket {
+
+            private List<CiscordChatMessage> messages;
+
+            public FetchMessagesInChannelAfterId() {
+            }
+
+            public FetchMessagesInChannelAfterId(List<CiscordChatMessage> messages) {
+                this.messages = messages;
+            }
+        }
+
+        @Getter
         public static class SendMessage extends CiscordPacket {
 
             private CiscordChatMessage message;
@@ -202,21 +356,6 @@ public class CiscordPackets {
 
             public SendMessage(CiscordChatMessage message) {
                 this.message = message;
-            }
-        }
-
-        @Getter
-        public static class RetrieveMessageHistory extends CiscordPacket {
-
-            private long channelId;
-            private List<CiscordChatMessage> messages;
-
-            public RetrieveMessageHistory() {
-            }
-
-            public RetrieveMessageHistory(long channelId, List<CiscordChatMessage> messages) {
-                this.channelId = channelId;
-                this.messages = messages;
             }
         }
     }

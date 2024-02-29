@@ -2,6 +2,7 @@ package dev.mayuna.ciscord.commons.objects;
 
 import lombok.Getter;
 
+import java.sql.ResultSet;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,13 +28,13 @@ public class CiscordChannel {
         this.name = name;
     }
 
-    /**
-     * Returns the next message ID
-     *
-     * @return Next message ID
-     */
-    public long getNextMessageId() {
-        return messages.size();
+    public CiscordChannel(ResultSet resultSet) {
+        try {
+            id = resultSet.getLong("id");
+            name = resultSet.getString("name");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create channel from result set", e);
+        }
     }
 
     /**
@@ -43,18 +44,5 @@ public class CiscordChannel {
      */
     public void addMessage(CiscordChatMessage message) {
         messages.add(message);
-    }
-
-    /**
-     * Creates and adds a message to the channel
-     *
-     * @param author  Author
-     * @param content Content
-     * @return Created message
-     */
-    public CiscordChatMessage createAndAddMessage(CiscordUser author, String content) {
-        CiscordChatMessage message = new CiscordChatMessage(author.getId(), id, new Date(), content);
-        addMessage(message);
-        return message;
     }
 }
