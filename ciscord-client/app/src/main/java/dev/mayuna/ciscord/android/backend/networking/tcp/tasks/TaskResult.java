@@ -10,7 +10,7 @@ public class TaskResult {
     private String errorMessage;
     private Exception exception;
 
-    private TaskResult(boolean success, String errorMessage, Exception exception) {
+    protected TaskResult(boolean success, String errorMessage, Exception exception) {
         this.success = success;
         this.errorMessage = errorMessage;
         this.exception = exception;

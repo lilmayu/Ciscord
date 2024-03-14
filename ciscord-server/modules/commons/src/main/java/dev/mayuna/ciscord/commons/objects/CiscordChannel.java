@@ -37,12 +37,15 @@ public class CiscordChannel {
         }
     }
 
-    /**
-     * Adds a message to the channel
-     *
-     * @param message Message
-     */
-    public void addMessage(CiscordChatMessage message) {
-        messages.add(message);
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<CiscordChatMessage> getMessages() {
+        return messages;
     }
 }

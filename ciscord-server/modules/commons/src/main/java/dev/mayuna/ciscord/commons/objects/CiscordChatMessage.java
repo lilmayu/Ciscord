@@ -37,4 +37,32 @@ public class CiscordChatMessage {
             throw new RuntimeException("Failed to create message from result set", e);
         }
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public long getChannelId() {
+        return channelId;
+    }
+
+    public long getAuthorId() {
+        return authorId;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public boolean isDelivered() {
+        return delivered;
+    }
 }

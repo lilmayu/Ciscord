@@ -1,16 +1,26 @@
 package dev.mayuna.ciscord.android
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.navigation.NavigationView
+import android.view.MenuItem
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.navigation.NavigationView
+import dev.mayuna.ciscord.android.backend.Ciscord
+import dev.mayuna.ciscord.android.backend.networking.tcp.tasks.ChannelTasks
 import dev.mayuna.ciscord.android.databinding.ActivityMainBinding
+import dev.mayuna.ciscord.commons.objects.CiscordChannel
+import dev.mayuna.ciscord.commons.objects.CiscordChatMessage
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,6 +83,89 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.set_channel) {
+            val alert: AlertDialog.Builder = AlertDialog.Builder(this)
+            alert.setTitle("Set Channel")
+            alert.setMessage("Please, specify the channel ID:")
+
+            val input = EditText(this)
+            alert.setView(input)
+
+            alert.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, whichButton ->
+                val value = input.text.toString().toLong()
+
+                ChannelTasks.fetch(value).whenCompleteAsync { result, throwable ->
+                    if (throwable != null) {
+                        return@whenCompleteAsync
+                    }
+
+                    if (result.result == null) {
+                        runOnUiThread {
+                            MaterialAlertDialogBuilder(this)
+                                .setTitle("Error")
+                                .setMessage("Channel with ID $value not found. Create it?")
+                                .setPositiveButton("OK") { dialog, which ->
+                                    run {
+                                        ChannelTasks.create(
+                                            Ciscord.user.username + "'s channel",
+                                        ).whenCompleteAsync { result, throwable ->
+                                            if (throwable != null) {
+                                                return@whenCompleteAsync
+                                            }
+
+                                            if (result == null) {
+                                                runOnUiThread {
+                                                    MaterialAlertDialogBuilder(this)
+                                                        .setTitle("Error")
+                                                        .setMessage("Failed to create channel")
+                                                        .setPositiveButton("OK", null)
+                                                        .show()
+                                                }
+                                                return@whenCompleteAsync
+                                            }
+
+                                            runOnUiThread {
+                                                MaterialAlertDialogBuilder(this)
+                                                    .setTitle("Success")
+                                                    .setMessage("Created the channel")
+                                                    .setPositiveButton("OK", null)
+                                                    .show()
+                                            }
+
+                                            Ciscord.currentChannel = result.result;
+                                            Ciscord.resetMessages = true;
+                                        }
+                                    }
+                                }
+                                .setNegativeButton("Cancel", null)
+                                .show()
+                        }
+                        return@whenCompleteAsync
+                    }
+
+                    Ciscord.currentChannel = result.result;
+                    Ciscord.resetMessages = true;
+                }
+
+                return@OnClickListener
+            })
+
+            alert.setNegativeButton("Cancel",
+                DialogInterface.OnClickListener { dialog, which ->
+                    return@OnClickListener
+                })
+
+            alert.show()
+
+            return true // Consume the event
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

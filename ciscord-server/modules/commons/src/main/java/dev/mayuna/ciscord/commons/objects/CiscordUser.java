@@ -36,4 +36,16 @@ public class CiscordUser {
             throw new RuntimeException("Failed to create CiscordUser from ResultSet", e);
         }
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public UUID getProfileIconUuid() {
+        return profileIconUuid;
+    }
 }

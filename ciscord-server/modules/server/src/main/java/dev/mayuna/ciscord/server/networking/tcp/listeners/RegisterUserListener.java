@@ -3,6 +3,7 @@ package dev.mayuna.ciscord.server.networking.tcp.listeners;
 import dev.mayuna.ciscord.commons.networking.CiscordPackets;
 import dev.mayuna.ciscord.commons.objects.CiscordUser;
 import dev.mayuna.ciscord.server.Main;
+import dev.mayuna.ciscord.server.networking.tcp.CiscordTimeStopConnection;
 import dev.mayuna.ciscord.server.util.PasswordAuthentication;
 import dev.mayuna.timestop.networking.base.listener.TimeStopListener;
 import lombok.NonNull;
@@ -48,6 +49,8 @@ public class RegisterUserListener extends TimeStopListener<CiscordPackets.Reques
                 return;
             }
 
+            CiscordTimeStopConnection connection = (CiscordTimeStopConnection) context.getConnection();
+            connection.setUser(createdUser);
             context.getConnection().sendTCP(new CiscordPackets.Responses.RegisterUser(true, createdUser).withResponseTo(message));
         });
     }

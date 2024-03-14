@@ -279,6 +279,10 @@ public class CiscordPackets {
             public FetchChannelById(CiscordChannel channel) {
                 this.channel = channel;
             }
+
+            public CiscordChannel getChannel() {
+                return channel;
+            }
         }
 
         @Getter
@@ -291,6 +295,10 @@ public class CiscordPackets {
 
             public CreateChannel(CiscordChannel channel) {
                 this.channel = channel;
+            }
+
+            public CiscordChannel getChannel() {
+                return channel;
             }
         }
 
@@ -344,6 +352,10 @@ public class CiscordPackets {
             public FetchMessagesInChannelAfterId(List<CiscordChatMessage> messages) {
                 this.messages = messages;
             }
+
+            public List<CiscordChatMessage> getMessages() {
+                return messages;
+            }
         }
 
         @Getter
@@ -356,6 +368,10 @@ public class CiscordPackets {
 
             public SendMessage(CiscordChatMessage message) {
                 this.message = message;
+            }
+
+            public CiscordChatMessage getMessage() {
+                return message;
             }
         }
     }

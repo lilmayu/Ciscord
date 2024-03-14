@@ -18,6 +18,7 @@ public class Ciscord {
     public static CiscordClient client = new CiscordClient(new ClientConfig());
     public static CiscordUser user;
     public static CiscordChannel currentChannel;
+    public static boolean resetMessages;
 
     public static void createClientAndConnect(@NotNull String host, int port) throws IOException {
         client = new CiscordClient(new ClientConfig());
